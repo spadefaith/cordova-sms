@@ -19,18 +19,36 @@
 
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
+
+
+
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
+    console.log(app);
 
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     document.getElementById('deviceready').classList.add('ready');
+
+
+    const socket = connect();
+
+    socket.on('connection' ,(e)=>{ 
+        let html = `<p>Connected to SMS Server with socket ID ${e.id}</p>`
+        let div = document.createElement('div');
+        div.innerHTML = html;
+        document.getElementById('deviceready').appendChild(div);
+    });
+    socket.on('message', (e)=>{
+        console.log(e);
+    })
 }
 
 
 function connect(){
-    
+    const socket = io('https://sms-server.cedrick1227.repl.co/',{ });
+    return socket;
 } 
 
 
